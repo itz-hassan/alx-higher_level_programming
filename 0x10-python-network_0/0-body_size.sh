@@ -1,3 +1,3 @@
 #!/bin/bash
-# takes URL and displays the size of the response body
-curl -sI "$1" | grep -i Content-Length | cut -d " " -f2
+#Script that takes URL and request size of body
+curl -sI "$1" | grep 'Content-Length' | awk '{print $2}'
