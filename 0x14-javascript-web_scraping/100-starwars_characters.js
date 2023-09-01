@@ -1,13 +1,14 @@
 #!/usr/bin/node
-// retrieves all character names in SW film
+
 const request = require('request');
-const FILM_URL = `http://swapi.co/api/films/${process.argv[2]}`;
-request(FILM_URL, function (error, response, body) {
-  if (error) {
-    throw new Error(error);
-  }
-  for (const url of JSON.parse(body).characters) {
-    request(url, (error, response, body) =>
-      !error && console.log(JSON.parse(body).name));
+const starWarsUri = 'https://swapi-api.hbtn.io/api/films/'.concat(process.argv[2]);
+
+request(starWarsUri, function (_err, _res, body) {
+  const characters = JSON.parse(body).characters;
+
+  for (let i = 0; i < characters.length; ++i) {
+    request(characters[i], function (_cErr, _cRes, cBody) {
+      console.log(JSON.parse(cBody).name);
+    });
   }
 });

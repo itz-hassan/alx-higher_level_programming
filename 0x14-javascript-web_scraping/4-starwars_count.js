@@ -1,14 +1,24 @@
 #!/usr/bin/node
-// makes get request for SW movie id
+
 const request = require('request');
-const find = '/18/';
-request(process.argv[2], function (error, response, body) {
-  if (error) throw new Error(error);
-  let num = 0;
-  for (const film of JSON.parse(body).results) {
-    for (const character of film.characters) {
-      num += (character.includes(find) ? 1 : 0);
+const starWarsUri = process.argv[2];
+let times = 0;
+
+request(starWarsUri, function (_err, _res, body) {
+  body = JSON.parse(body).results;
+
+  for (let i = 0; i < body.length; ++i) {
+    const characters = body[i].characters;
+
+    for (let j = 0; j < characters.length; ++j) {
+      const character = characters[j];
+      const characterId = character.split('/')[5];
+
+      if (characterId === '18') {
+        times += 1;
+      }
     }
   }
-  console.log(num);
+
+  console.log(times);
 });
